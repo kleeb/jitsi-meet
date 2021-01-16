@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/jitsi/jitsi-meet-ios-sdk-releases'
   s.license          = 'Apache 2'
   s.authors          = 'The Jitsi Meet project authors'
-  s.source           = { :path => '/Users/vagrant/tmp/jitsi-meet-ios-sdk-releases' }
+  s.source           = { :git => 'https://github.com/kleeb/jitsi-meet-ios-sdk-releases.git', :tag => s.version }
   s.social_media_url = 'https://twitter.com/jitsinews'
 
   s.platform         = :ios, '11.0'
