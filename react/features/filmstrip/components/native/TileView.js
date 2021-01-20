@@ -215,7 +215,7 @@ class TileView extends Component<Props> {
         const rowElements = [];
 
         if (participantsCount === 5 && this._isNarrowView()) {
-            rowElements.push(this._getTilesRow(rowElements, localThumbnail));
+            rowElements.push(this._getTilesRow(rowElements.length, localThumbnail));
         } else if (!this._isNarrowView() || participantsCount >= 4) {
             thumbnails.splice(this._getColumnCount() - 1, 0, localThumbnail);
         }
@@ -225,7 +225,7 @@ class TileView extends Component<Props> {
                 const thumbnailsInRow = thumbnails.slice(i, i + rowLength);
 
                 rowElements.push(
-                    this._getTilesRow(rowElements, thumbnailsInRow)
+                    this._getTilesRow(rowElements.length, thumbnailsInRow)
                 );
             }
         }
@@ -336,19 +336,40 @@ class TileView extends Component<Props> {
         return <LocalThumbnail styleOverrides = { stylesLocalThumbnail } />;
     }
 
+    /**
+     * Check if are we in narrow view.
+     *
+     * @private
+     * @returns {boolean}
+     */
     _isNarrowView() {
         return this.props._aspectRatio === ASPECT_RATIO_NARROW;
     }
 
+    /**
+     * Count ratio for tiles.
+     *
+     * @private
+     * @returns {number}
+     */
     _getTilesRatio() {
         return this._getTileDimensions().width / this._getTileDimensions().height;
     }
 
-    _getTilesRow(rowElements, thumbnail) {
+    /**
+     * Create React Elements with one tiles row.
+     *
+     * @param {number} index - Index of the row.
+     * @param {Array} thumbnails - The list of thumbnails that should be split
+     *  into row.
+     * @private
+     * @returns {ReactElement}
+     */
+    _getTilesRow(index, thumbnails) {
         return (<View
-            key = { rowElements.length }
+            key = { index }
             style = { styles.tileViewRow }>
-            { thumbnail }
+            { thumbnails }
         </View>);
     }
 }
