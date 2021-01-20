@@ -140,7 +140,9 @@ class OverflowMenu extends PureComponent<Props, State> {
                     <TileViewButton { ...buttonProps } />
                     <RecordButton { ...buttonProps } />
                     <LiveStreamButton { ...buttonProps } />
-                    <VideoShareButton { ...buttonProps } />
+                    {/* BL-216 Turn off Share a youtube video option:
+                        <VideoShareButton { ...buttonProps } />
+                    */}
                     <RoomLockButton { ...buttonProps } />
                     <ClosedCaptionButton { ...buttonProps } />
                     <SharedDocumentButton { ...buttonProps } />
