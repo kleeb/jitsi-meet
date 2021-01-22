@@ -75,13 +75,6 @@ export function getTileViewGridDimensions(state: Object, maxColumns: number = ge
 export function shouldDisplayTileView(state: Object = {}) {
     const participantCount = getParticipantCount(state);
 
-    // In case of a lonely meeting, we don't allow tile view.
-    // But it's a special case too, as we don't even render the button,
-    // see TileViewButton component.
-    if (participantCount < 2) {
-        return false;
-    }
-
     const { tileViewEnabled } = state['features/video-layout'];
 
     if (tileViewEnabled !== undefined) {
