@@ -14,7 +14,12 @@ type Props = {
     /**
      * The local participant.
      */
-    _localParticipant: Object
+    _localParticipant: Object,
+
+    /**
+     * Optional styling to add or override on the Thumbnail component root.
+     */
+    styleOverrides?: Object,
 };
 
 /**
@@ -32,7 +37,10 @@ class LocalThumbnail extends Component<Props> {
 
         return (
             <View style = { styles.localThumbnail }>
-                <Thumbnail participant = { _localParticipant } />
+
+                <Thumbnail
+                    participant = { _localParticipant }
+                    styleOverrides = { this.props.styleOverrides } />
             </View>
         );
     }

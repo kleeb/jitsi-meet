@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 import type { Dispatch } from 'redux';
 
+import { Container } from '../../../base/react';
 import { connect } from '../../../base/redux';
 import { ASPECT_RATIO_NARROW } from '../../../base/responsive-ui/constants';
 import { setTileViewDimensions } from '../../actions.native';
 
+import LocalThumbnail from './LocalThumbnail';
 import Thumbnail from './Thumbnail';
 import styles from './styles';
 
@@ -61,14 +63,6 @@ type Props = {
 const MARGIN = 10;
 
 /**
- * The aspect ratio the tiles should display in.
- *
- * @private
- * @type {number}
- */
-const TILE_ASPECT_RATIO = 1;
-
-/**
  * Implements a React {@link Component} which displays thumbnails in a two
  * dimensional grid.
  *
@@ -101,26 +95,33 @@ class TileView extends Component<Props> {
      */
     render() {
         const { _height, _width, onClick } = this.props;
-        const rowElements = this._groupIntoRows(this._renderThumbnails(), this._getColumnCount());
+        const rowElements = this._groupIntoRows(this._renderThumbnails(), this._getColumnCount(), this._renderLocalThumbnails());
 
         return (
-            <ScrollView
-                style = {{
-                    ...styles.tileView,
-                    height: _height,
-                    width: _width
-                }}>
-                <TouchableWithoutFeedback onPress = { onClick }>
-                    <View
-                        style = {{
-                            ...styles.tileViewRows,
-                            minHeight: _height,
-                            minWidth: _width
-                        }}>
-                        { rowElements }
-                    </View>
-                </TouchableWithoutFeedback>
-            </ScrollView>
+            <Container>
+                <ScrollView
+                    style = {{
+                        ...styles.tileView,
+                        height: _height,
+                        width: _width,
+                        position: 'absolute'
+                    }}>
+
+                    <TouchableWithoutFeedback onPress = { onClick }>
+                        <View
+                            style = {{
+                                ...styles.tileViewRows,
+                                minHeight: _height,
+                                minWidth: _width
+                            }}>
+
+
+                            { rowElements }
+                        </View>
+                    </TouchableWithoutFeedback>
+                </ScrollView>
+                {this._shouldShowSmallLocalThumbnail() && this._smallLocalThumbnail()}
+            </Container>
         );
     }
 
@@ -133,16 +134,12 @@ class TileView extends Component<Props> {
     _getColumnCount() {
         const participantCount = this.props._participants.length;
 
-        // For narrow view, tiles should stack on top of each other for a lonely
-        // call and a 1:1 call. Otherwise tiles should be grouped into rows of
-        // two.
-        if (this.props._aspectRatio === ASPECT_RATIO_NARROW) {
-            return participantCount >= 3 ? 2 : 1;
+        if (participantCount === 4) {
+            return 2;
         }
 
-        if (participantCount === 4) {
-            // In wide view, a four person call should display as a 2x2 grid.
-            return 2;
+        if (this._isNarrowView()) {
+            return participantCount > 3 ? 2 : 1;
         }
 
         return Math.min(3, participantCount);
@@ -166,7 +163,7 @@ class TileView extends Component<Props> {
             }
         }
 
-        localParticipant && participants.push(localParticipant);
+        localParticipant && !this._shouldShowSmallLocalThumbnail() && participants.push(localParticipant);
 
         return participants;
     }
@@ -184,17 +181,21 @@ class TileView extends Component<Props> {
         const heightToUse = _height - (MARGIN * 2);
         const widthToUse = _width - (MARGIN * 2);
         let tileWidth;
+        let tileHeight;
 
-        // If there is going to be at least two rows, ensure that at least two
-        // rows display fully on screen.
-        if (participantCount / columns > 1) {
-            tileWidth = Math.min(widthToUse / columns, heightToUse / 2);
+        if (participantCount === 2) {
+            tileHeight = heightToUse;
+            tileWidth = widthToUse;
+        } else if (participantCount >= 3 && participantCount < 5) {
+            tileHeight = heightToUse / 2;
+            tileWidth = widthToUse / columns;
         } else {
-            tileWidth = Math.min(widthToUse / columns, heightToUse);
+            tileHeight = heightToUse / 3;
+            tileWidth = widthToUse / columns;
         }
 
         return {
-            height: tileWidth / TILE_ASPECT_RATIO,
+            height: tileHeight,
             width: tileWidth
         };
     }
@@ -209,19 +210,22 @@ class TileView extends Component<Props> {
      * @private
      * @returns {ReactElement[]}
      */
-    _groupIntoRows(thumbnails, rowLength) {
+    _groupIntoRows(thumbnails, rowLength, localThumbnail) {
+        const participantsCount = this.props._participants.length;
         const rowElements = [];
+
+        if (participantsCount === 5 && this._isNarrowView()) {
+            rowElements.push(this._getTilesRow(rowElements.length, localThumbnail));
+        } else if (!this._isNarrowView() || participantsCount >= 4) {
+            thumbnails.splice(this._getColumnCount() - 1, 0, localThumbnail);
+        }
 
         for (let i = 0; i < thumbnails.length; i++) {
             if (i % rowLength === 0) {
                 const thumbnailsInRow = thumbnails.slice(i, i + rowLength);
 
                 rowElements.push(
-                    <View
-                        key = { rowElements.length }
-                        style = { styles.tileViewRow }>
-                        { thumbnailsInRow }
-                    </View>
+                    this._getTilesRow(rowElements.length, thumbnailsInRow)
                 );
             }
         }
@@ -230,7 +234,7 @@ class TileView extends Component<Props> {
     }
 
     /**
-     * Creates React Elements to display each participant in a thumbnail. Each
+     * Creates React Elements to display participants in a thumbnail (without local tumbnail). Each
      * tile will be.
      *
      * @private
@@ -238,13 +242,13 @@ class TileView extends Component<Props> {
      */
     _renderThumbnails() {
         const styleOverrides = {
-            aspectRatio: TILE_ASPECT_RATIO,
+            aspectRatio: this._getTilesRatio(),
             flex: 0,
             height: this._getTileDimensions().height,
             width: null
         };
 
-        return this._getSortedParticipants()
+        return this._getSortedParticipants().filter(participant => !participant.local)
             .map(participant => (
                 <Thumbnail
                     disableTint = { true }
@@ -253,6 +257,38 @@ class TileView extends Component<Props> {
                     renderDisplayName = { true }
                     styleOverrides = { styleOverrides }
                     tileView = { true } />));
+    }
+
+    /**
+     * Creates React Elements to display local thumbnail.
+     *
+     * @private
+     * @returns {ReactElement[]}
+     */
+    _renderLocalThumbnails() {
+        const participantsCount = this.props._participants.length;
+        const styleOverrides = {
+            aspectRatio: this._getTilesRatio(),
+            flex: 0,
+            height: this._getTileDimensions().height,
+            width: null
+        };
+
+        return this._getSortedParticipants().filter(participant => participant.local)
+            .map(participant => {
+                if (participantsCount === 5 && this._isNarrowView()) {
+                    styleOverrides.aspectRatio = styleOverrides.aspectRatio * 2;
+                }
+
+                return (
+                    <Thumbnail
+                        disableTint = { true }
+                        key = { participant.id }
+                        participant = { participant }
+                        renderDisplayName = { true }
+                        styleOverrides = { styleOverrides }
+                        tileView = { true } />);
+            });
     }
 
     /**
@@ -271,6 +307,70 @@ class TileView extends Component<Props> {
                 width
             }
         }));
+    }
+
+    /**
+     * Checks if a small local thumnail should be shown.
+     *
+     * @private
+     * @returns {boolean}
+     */
+    _shouldShowSmallLocalThumbnail() {
+        return this.props._participants.length <= 3;
+    }
+
+    /**
+     * Render small Thumbnail at the top.
+     *
+     * @private
+     * @returns {ReactElement}
+     */
+    _smallLocalThumbnail() {
+        const stylesLocalThumbnail = {
+            'position': 'absolute',
+            right: 20,
+            top: 50,
+            zIndex: 1
+        };
+
+        return <LocalThumbnail styleOverrides = { stylesLocalThumbnail } />;
+    }
+
+    /**
+     * Check if are we in narrow view.
+     *
+     * @private
+     * @returns {boolean}
+     */
+    _isNarrowView() {
+        return this.props._aspectRatio === ASPECT_RATIO_NARROW;
+    }
+
+    /**
+     * Count ratio for tiles.
+     *
+     * @private
+     * @returns {number}
+     */
+    _getTilesRatio() {
+        return this._getTileDimensions().width / this._getTileDimensions().height;
+    }
+
+    /**
+     * Create React Elements with one tiles row.
+     *
+     * @param {number} index - Index of the row.
+     * @param {Array} thumbnails - The list of thumbnails that should be split
+     *  into row.
+     * @private
+     * @returns {ReactElement}
+     */
+    _getTilesRow(index, thumbnails) {
+        return (<View
+            key = { index }
+            style = { styles.tileViewRow }>
+            { thumbnails }
+        </View>);
     }
 }
 
