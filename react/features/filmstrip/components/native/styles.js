@@ -22,7 +22,8 @@ export default {
         bottom: 0,
         flex: 1,
         margin: 4,
-        position: 'absolute'
+        position: 'absolute',
+        zIndex: 20001
     },
 
     /**
