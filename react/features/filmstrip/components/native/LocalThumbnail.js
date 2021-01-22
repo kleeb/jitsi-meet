@@ -20,6 +20,13 @@ type Props = {
      * Optional styling to add or override on the Thumbnail component root.
      */
     styleOverrides?: Object,
+
+    /**
+     * The z-order of the {@link Video} of {@link ParticipantView} in the
+     * stacking space of all {@code Video}s. For more details, refer to the
+     * {@code zOrder} property of the {@code Video} class for React Native.
+     */
+    zOrder: number,
 };
 
 /**
@@ -40,7 +47,8 @@ class LocalThumbnail extends Component<Props> {
 
                 <Thumbnail
                     participant = { _localParticipant }
-                    styleOverrides = { this.props.styleOverrides } />
+                    styleOverrides = { this.props.styleOverrides }
+                    zOrder = { this.props?.zOrder } />
             </View>
         );
     }

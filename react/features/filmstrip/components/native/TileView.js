@@ -329,11 +329,12 @@ class TileView extends Component<Props> {
         const stylesLocalThumbnail = {
             'position': 'absolute',
             right: 20,
-            top: 50,
-            zIndex: 20000
+            top: 55
         };
 
-        return <LocalThumbnail styleOverrides = { stylesLocalThumbnail } />;
+        return (<LocalThumbnail
+            styleOverrides = { stylesLocalThumbnail }
+            zOrder = { 2 } />);
     }
 
     /**
