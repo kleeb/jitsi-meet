@@ -234,7 +234,7 @@ class TileView extends Component<Props> {
     }
 
     /**
-     * Creates React Elements to display participants in a thumbnail (without local tumbnail). Each
+     * Creates React Elements to display participants in a thumbnail (without local thumbnail). Each
      * tile will be.
      *
      * @private
@@ -329,11 +329,12 @@ class TileView extends Component<Props> {
         const stylesLocalThumbnail = {
             'position': 'absolute',
             right: 20,
-            top: 50,
-            zIndex: 1
+            top: 55
         };
 
-        return <LocalThumbnail styleOverrides = { stylesLocalThumbnail } />;
+        return (<LocalThumbnail
+            styleOverrides = { stylesLocalThumbnail }
+            zOrder = { 2 } />);
     }
 
     /**
