@@ -53,7 +53,7 @@ type Props = {
     onClick: Function,
 
     /**
-     * Is connecting to call.
+     * If connection to call in progress return true.
      */
     isConnecting: boolean,
 };
