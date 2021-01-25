@@ -107,7 +107,14 @@ type Props = {
     /**
      * If true, it tells the thumbnail that it needs to behave differently. E.g. react differently to a single tap.
      */
-    tileView?: boolean
+    tileView?: boolean,
+
+    /**
+     * The z-order of the {@link Video} of {@link ParticipantView} in the
+     * stacking space of all {@code Video}s. For more details, refer to the
+     * {@code zOrder} property of the {@code Video} class for React Native.
+     */
+    zOrder: number,
 };
 
 /**
@@ -157,10 +164,12 @@ function Thumbnail(props: Props) {
                 style = { _styles.participantViewStyle }
                 tintEnabled = { participantInLargeVideo && !disableTint }
                 tintStyle = { _styles.activeThumbnailTint }
-                zOrder = { 1 } />
+                zOrder = { props?.zOrder ? props.zOrder : 1 } />
 
             { renderDisplayName && <Container style = { styles.displayNameContainer }>
-                <DisplayNameLabel participantId = { participantId } />
+                <DisplayNameLabel
+                    participantId = { participantId }
+                    renderOverVideo = { true } />
             </Container> }
 
             { renderModeratorIndicator
