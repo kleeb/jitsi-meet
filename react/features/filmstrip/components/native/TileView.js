@@ -137,7 +137,9 @@ class TileView extends Component<Props> {
         if (participantCount === 4) {
             return 2;
         }
-
+        if (!this._isNarrowView() && participantCount === 3) {
+            return 2;
+        }
         if (this._isNarrowView()) {
             return participantCount > 3 ? 2 : 1;
         }
@@ -186,6 +188,9 @@ class TileView extends Component<Props> {
         if (participantCount === 2) {
             tileHeight = heightToUse;
             tileWidth = widthToUse;
+        } else if (participantCount === 3 && !this._isNarrowView()) {
+            tileHeight = heightToUse;
+            tileWidth = widthToUse / columns;
         } else if (participantCount >= 3 && participantCount < 5) {
             tileHeight = heightToUse / 2;
             tileWidth = widthToUse / columns;
@@ -216,7 +221,7 @@ class TileView extends Component<Props> {
 
         if (participantsCount === 5 && this._isNarrowView()) {
             rowElements.push(this._getTilesRow(rowElements.length, localThumbnail));
-        } else if (!this._isNarrowView() || participantsCount >= 4) {
+        } else if ((!this._isNarrowView() || participantsCount >= 4) && participantsCount !== 3) {
             thumbnails.splice(this._getColumnCount() - 1, 0, localThumbnail);
         }
 
