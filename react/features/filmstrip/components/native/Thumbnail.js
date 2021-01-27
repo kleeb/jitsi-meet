@@ -167,7 +167,9 @@ function Thumbnail(props: Props) {
                 zOrder = { props?.zOrder ? props.zOrder : 1 } />
 
             { renderDisplayName && <Container style = { styles.displayNameContainer }>
-                <DisplayNameLabel participantId = { participantId } />
+                <DisplayNameLabel
+                    participantId = { participantId }
+                    renderOverVideo = { true } />
             </Container> }
 
             { renderModeratorIndicator

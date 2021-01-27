@@ -6,7 +6,7 @@ import { MiddlewareRegistry, StateListenerRegistry } from '../base/redux';
 import { SET_DOCUMENT_EDITING_STATUS } from '../etherpad';
 
 import { SET_TILE_VIEW } from './actionTypes';
-import { setTileView } from './actions';
+import { clearTileViewState } from './actions';
 
 import './subscriber';
 
@@ -64,7 +64,7 @@ StateListenerRegistry.register(
         if (conference !== previousConference) {
             // conference changed, left or failed...
             // Clear tile view state.
-            dispatch(setTileView());
+            dispatch(clearTileViewState());
         }
     });
 
@@ -95,6 +95,6 @@ function _storeTileViewStateAndClear({ dispatch, getState }) {
 
     if (tileViewEnabled !== undefined) {
         previousTileViewEnabled = tileViewEnabled;
-        dispatch(setTileView(undefined));
+        dispatch(clearTileViewState());
     }
 }

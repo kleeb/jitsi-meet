@@ -20,3 +20,12 @@ export const SCREEN_SHARE_PARTICIPANTS_UPDATED
  * }}
  */
 export const SET_TILE_VIEW = 'SET_TILE_VIEW';
+
+/**
+ * The type of the action which set tile view to default value.
+ *
+ * @returns {{
+ *     type: CLEAR_TILE_VIEW_STATE,
+ * }}
+ */
+export const CLEAR_TILE_VIEW_STATE = 'CLEAR_TILE_VIEW_STATE';

@@ -50,7 +50,12 @@ type Props = {
     /**
      * Callback to invoke when tile view is tapped.
      */
-    onClick: Function
+    onClick: Function,
+
+    /**
+     * If connection to call in progress return true.
+     */
+    isConnecting: boolean,
 };
 
 /**
@@ -321,7 +326,9 @@ class TileView extends Component<Props> {
      * @returns {boolean}
      */
     _shouldShowSmallLocalThumbnail() {
-        return this.props._participants.length <= 3;
+        const { isConnecting } = this.props;
+
+        return !isConnecting && this.props._participants.length <= 3;
     }
 
     /**
