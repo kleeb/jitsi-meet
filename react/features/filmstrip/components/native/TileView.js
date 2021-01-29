@@ -16,7 +16,7 @@ import { connect } from '../../../base/redux';
 import { ASPECT_RATIO_NARROW } from '../../../base/responsive-ui/constants';
 import { setTileViewDimensions } from '../../actions.native';
 
-import LocalThumbnail from './LocalThumbnail';
+import Filmstrip from './Filmstrip';
 import Thumbnail from './Thumbnail';
 import styles from './styles';
 
@@ -354,9 +354,7 @@ class TileView extends Component<Props> {
             top: Platform.OS === 'ios' ? StatusBarSizeIOS.currentHeight : StatusBar.currentHeight
         };
 
-        return (<LocalThumbnail
-            styleOverrides = { stylesLocalThumbnail }
-            zOrder = { 1 } />);
+        return <View style = { stylesLocalThumbnail }><Filmstrip _localOnly = { true } /></View>;
     }
 
     /**

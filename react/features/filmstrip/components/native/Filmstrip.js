@@ -35,7 +35,12 @@ type Props = {
     /**
      * The indicator which determines whether the filmstrip is visible.
      */
-    _visible: boolean
+    _visible: boolean,
+
+    /**
+     * Show only local user.
+     */
+    _localOnly: boolean
 };
 
 /**
@@ -86,7 +91,7 @@ class Filmstrip extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _aspectRatio, _enabled, _participants, _visible } = this.props;
+        const { _aspectRatio, _enabled, _participants, _visible, _localOnly } = this.props;
 
         if (!_enabled) {
             return null;
@@ -102,7 +107,7 @@ class Filmstrip extends Component<Props> {
                 {
                     this._separateLocalThumbnail
                         && !isNarrowAspectRatio
-                        && <LocalThumbnail />
+                        && <LocalThumbnail zOrder = { 1 } />
                 }
                 <ScrollView
                     horizontal = { isNarrowAspectRatio }
@@ -111,11 +116,11 @@ class Filmstrip extends Component<Props> {
                     style = { styles.scrollView } >
                     {
                         !this._separateLocalThumbnail && !isNarrowAspectRatio
-                            && <LocalThumbnail />
+                            && <LocalThumbnail zOrder = { 1 } />
                     }
                     {
 
-                        this._sort(_participants, isNarrowAspectRatio)
+                        !_localOnly && this._sort(_participants, isNarrowAspectRatio)
                             .map(p => (
                                 <Thumbnail
                                     key = { p.id }
@@ -124,12 +129,12 @@ class Filmstrip extends Component<Props> {
                     }
                     {
                         !this._separateLocalThumbnail && isNarrowAspectRatio
-                            && <LocalThumbnail />
+                            && <LocalThumbnail zOrder = { 1 } />
                     }
                 </ScrollView>
                 {
                     this._separateLocalThumbnail && isNarrowAspectRatio
-                        && <LocalThumbnail />
+                        && <LocalThumbnail zOrder = { 1 } />
                 }
             </Container>
         );
