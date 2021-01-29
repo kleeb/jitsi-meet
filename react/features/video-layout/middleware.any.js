@@ -6,7 +6,7 @@ import { MiddlewareRegistry, StateListenerRegistry } from '../base/redux';
 import { SET_DOCUMENT_EDITING_STATUS } from '../etherpad';
 
 import { SET_TILE_VIEW } from './actionTypes';
-import { clearTileViewState } from './actions';
+import { clearTileViewState, setTileView } from './actions';
 
 import './subscriber';
 
@@ -95,6 +95,6 @@ function _storeTileViewStateAndClear({ dispatch, getState }) {
 
     if (tileViewEnabled !== undefined) {
         previousTileViewEnabled = tileViewEnabled;
-        dispatch(clearTileViewState());
+        dispatch(setTileView(false));
     }
 }
