@@ -98,7 +98,7 @@ class Filmstrip extends Component<Props> {
         }
 
         const isNarrowAspectRatio = _aspectRatio === ASPECT_RATIO_NARROW;
-        const filmstripStyle = isNarrowAspectRatio ? styles.filmstripNarrow : styles.filmstripWide;
+        const filmstripStyle = isNarrowAspectRatio || _localOnly ? styles.filmstripNarrow : styles.filmstripWide;
 
         return (
             <Container
@@ -106,6 +106,7 @@ class Filmstrip extends Component<Props> {
                 visible = { _visible }>
                 {
                     this._separateLocalThumbnail
+
                         && !isNarrowAspectRatio
                         && <LocalThumbnail zOrder = { 1 } />
                 }
