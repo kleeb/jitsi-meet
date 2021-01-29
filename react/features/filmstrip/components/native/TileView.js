@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     TouchableWithoutFeedback,
-    View
+    View,
+    Platform,
+    StatusBar
 } from 'react-native';
+import StatusBarSizeIOS from 'react-native-status-bar-size';
 import type { Dispatch } from 'redux';
 
 import { Container } from '../../../base/react';
@@ -224,18 +227,24 @@ class TileView extends Component<Props> {
         const participantsCount = this.props._participants.length;
         const rowElements = [];
 
+        const _thumbnails = thumbnails.filter(t => t !== undefined);
+
         if (participantsCount === 5 && this._isNarrowView()) {
             rowElements.push(this._getTilesRow(rowElements.length, localThumbnail));
         } else if ((!this._isNarrowView() || participantsCount >= 4) && participantsCount !== 3) {
-            thumbnails.splice(this._getColumnCount() - 1, 0, localThumbnail);
+            _thumbnails.splice(this._getColumnCount() - 1, 0, localThumbnail);
+        }
+        if (this._isNarrowView() && participantsCount !== 5 && _thumbnails[0]) {
+            _thumbnails[0] = React.cloneElement(_thumbnails[0], { lowerTopIcons: true });
         }
 
-        for (let i = 0; i < thumbnails.length; i++) {
+        for (let i = 0; i < _thumbnails.length; i++) {
             if (i % rowLength === 0) {
-                const thumbnailsInRow = thumbnails.slice(i, i + rowLength);
+                const thumbnailsInRow = _thumbnails.slice(i, i + rowLength);
+                const index = rowElements.length;
 
                 rowElements.push(
-                    this._getTilesRow(rowElements.length, thumbnailsInRow)
+                    this._getTilesRow(index, thumbnailsInRow)
                 );
             }
         }
@@ -294,6 +303,7 @@ class TileView extends Component<Props> {
                     <Thumbnail
                         disableTint = { true }
                         key = { participant.id }
+                        lowerTopIcons = { this._isNarrowView() }
                         participant = { participant }
                         renderDisplayName = { true }
                         styleOverrides = { styleOverrides }
@@ -341,12 +351,12 @@ class TileView extends Component<Props> {
         const stylesLocalThumbnail = {
             'position': 'absolute',
             right: 20,
-            top: 55
+            top: Platform.OS === 'ios' ? StatusBarSizeIOS.currentHeight : StatusBar.currentHeight
         };
 
         return (<LocalThumbnail
             styleOverrides = { stylesLocalThumbnail }
-            zOrder = { 2 } />);
+            zOrder = { 1 } />);
     }
 
     /**
