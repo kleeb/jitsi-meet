@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
+import StatusBarSizeIOS from 'react-native-status-bar-size';
 import type { Dispatch } from 'redux';
 
 import { ColorSchemeRegistry } from '../../../base/color-scheme';
@@ -115,6 +116,12 @@ type Props = {
      * {@code zOrder} property of the {@code Video} class for React Native.
      */
     zOrder: number,
+
+    /**
+     * Lower top icons, to avoid hiding by top bar (ios)
+     *
+     */
+    lowerTopIcons?: boolean,
 };
 
 /**
@@ -136,7 +143,8 @@ function Thumbnail(props: Props) {
         disableTint,
         participant,
         renderDisplayName,
-        tileView
+        tileView,
+        lowerTopIcons
     } = props;
 
     const participantId = participant.id;
@@ -164,7 +172,7 @@ function Thumbnail(props: Props) {
                 style = { _styles.participantViewStyle }
                 tintEnabled = { participantInLargeVideo && !disableTint }
                 tintStyle = { _styles.activeThumbnailTint }
-                zOrder = { props?.zOrder ? props.zOrder : 1 } />
+                zOrder = { props?.zOrder ? props.zOrder : 0 } />
 
             { renderDisplayName && <Container style = { styles.displayNameContainer }>
                 <DisplayNameLabel
@@ -180,7 +188,8 @@ function Thumbnail(props: Props) {
             { !participant.isFakeParticipant && <View
                 style = { [
                     styles.thumbnailTopIndicatorContainer,
-                    styles.thumbnailTopLeftIndicatorContainer
+                    styles.thumbnailTopLeftIndicatorContainer,
+                    { top: _isIos() && lowerTopIcons ? StatusBarSizeIOS.currentHeight / 2 : 0 }
                 ] }>
                 <RaisedHandIndicator participantId = { participant.id } />
                 { renderDominantSpeakerIndicator && <DominantSpeakerIndicator /> }
@@ -189,7 +198,8 @@ function Thumbnail(props: Props) {
             { !participant.isFakeParticipant && <View
                 style = { [
                     styles.thumbnailTopIndicatorContainer,
-                    styles.thumbnailTopRightIndicatorContainer
+                    styles.thumbnailTopRightIndicatorContainer,
+                    { top: _isIos() && lowerTopIcons ? StatusBarSizeIOS.currentHeight / 2 : 0 }
                 ] }>
                 <ConnectionIndicator participantId = { participant.id } />
             </View> }
@@ -214,7 +224,7 @@ function Thumbnail(props: Props) {
  * @param {Props} ownProps - The own props of the component.
  * @returns {{
  *     _onClick: Function,
- *     _onShowRemoteVideoMenu: Function
+ *     _onThumbnailLongPress: Function
  * }}
  */
 function _mapDispatchToProps(dispatch: Function, ownProps): Object {
@@ -254,6 +264,15 @@ function _mapDispatchToProps(dispatch: Function, ownProps): Object {
             }
         }
     };
+}
+
+/**
+ * Check if your current platform is iOS.
+ *
+ * @returns Boolean.
+ */
+function _isIos() {
+    return Platform.OS === 'ios';
 }
 
 /**
