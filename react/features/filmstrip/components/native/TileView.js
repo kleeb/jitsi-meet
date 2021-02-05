@@ -5,10 +5,9 @@ import {
     ScrollView,
     TouchableWithoutFeedback,
     View,
-    Platform,
-    StatusBar
+    Platform
 } from 'react-native';
-import StatusBarSizeIOS from 'react-native-status-bar-size';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import type { Dispatch } from 'redux';
 
 import { Container } from '../../../base/react';
@@ -351,7 +350,7 @@ class TileView extends Component<Props> {
         const stylesLocalThumbnail = {
             'position': 'absolute',
             right: 20,
-            top: Platform.OS === 'ios' ? StatusBarSizeIOS.currentHeight : StatusBar.currentHeight
+            top: _smallThumbnailTop()
         };
 
         return <View style = { stylesLocalThumbnail }><Filmstrip _localOnly = { true } /></View>;
@@ -411,6 +410,21 @@ function _mapStateToProps(state) {
         _participants: state['features/base/participants'],
         _width: responsiveUi.clientWidth
     };
+}
+
+/**
+ * Get top value for small thumbnails.
+ *
+ * @returns {number}
+ */
+function _smallThumbnailTop() {
+    const barHeight = getStatusBarHeight();
+
+    if (Platform.OS === 'ios') {
+        return Math.max(50, barHeight);
+    }
+
+    return barHeight + 10;
 }
 
 export default connect(_mapStateToProps)(TileView);

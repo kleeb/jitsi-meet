@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, Platform } from 'react-native';
-import StatusBarSizeIOS from 'react-native-status-bar-size';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import type { Dispatch } from 'redux';
 
 import { ColorSchemeRegistry } from '../../../base/color-scheme';
@@ -189,7 +189,7 @@ function Thumbnail(props: Props) {
                 style = { [
                     styles.thumbnailTopIndicatorContainer,
                     styles.thumbnailTopLeftIndicatorContainer,
-                    { top: _isIos() && lowerTopIcons ? StatusBarSizeIOS.currentHeight / 2 : 0 }
+                    { top: _isIos() && lowerTopIcons ? getStatusBarHeight() / 2 : 0 }
                 ] }>
                 <RaisedHandIndicator participantId = { participant.id } />
                 { renderDominantSpeakerIndicator && <DominantSpeakerIndicator /> }
@@ -199,7 +199,7 @@ function Thumbnail(props: Props) {
                 style = { [
                     styles.thumbnailTopIndicatorContainer,
                     styles.thumbnailTopRightIndicatorContainer,
-                    { top: _isIos() && lowerTopIcons ? StatusBarSizeIOS.currentHeight / 2 : 0 }
+                    { top: _isIos() && lowerTopIcons ? getStatusBarHeight() / 2 : 0 }
                 ] }>
                 <ConnectionIndicator participantId = { participant.id } />
             </View> }
