@@ -5,6 +5,7 @@ import { View } from 'react-native';
 
 import { getLocalParticipant } from '../../../base/participants';
 import { connect } from '../../../base/redux';
+import { RECTANGLE_THUMBNAIL_HEIGHT } from '../../constants';
 
 import Thumbnail from './Thumbnail';
 import styles from './styles';
@@ -27,6 +28,11 @@ type Props = {
      * {@code zOrder} property of the {@code Video} class for React Native.
      */
     zOrder: number,
+
+    /**
+     * Display as rectangle
+     */
+    rectangle: boolean,
 };
 
 /**
@@ -40,14 +46,21 @@ class LocalThumbnail extends Component<Props> {
      * @inheritdoc
      */
     render() {
-        const { _localParticipant } = this.props;
+        const { _localParticipant, rectangle } = this.props;
+
+        const customStyles = {};
+
+        if (rectangle) {
+            customStyles.aspectRatio = 3 / 4;
+            customStyles.width = RECTANGLE_THUMBNAIL_HEIGHT * customStyles.aspectRatio;
+        }
 
         return (
-            <View style = { styles.localThumbnail }>
+            <View style = { [ styles.localThumbnail, customStyles ] }>
 
                 <Thumbnail
                     participant = { _localParticipant }
-                    styleOverrides = { this.props.styleOverrides }
+                    styleOverrides = { [ this.props.styleOverrides, customStyles ] }
                     zOrder = { this.props?.zOrder } />
             </View>
         );
