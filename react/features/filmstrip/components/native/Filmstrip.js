@@ -98,7 +98,13 @@ class Filmstrip extends Component<Props> {
         }
 
         const isNarrowAspectRatio = _aspectRatio === ASPECT_RATIO_NARROW;
-        const filmstripStyle = isNarrowAspectRatio || _localOnly ? styles.filmstripNarrow : styles.filmstripWide;
+        let filmstripStyle = {};
+
+        if (_localOnly) {
+            filmstripStyle = styles.filmstripLocalOnly;
+        } else {
+            filmstripStyle = isNarrowAspectRatio ? styles.filmstripNarrow : styles.filmstripWide;
+        }
 
         return (
             <Container
@@ -108,7 +114,9 @@ class Filmstrip extends Component<Props> {
                     this._separateLocalThumbnail
 
                         && !isNarrowAspectRatio
-                        && <LocalThumbnail zOrder = { 1 } />
+                        && <LocalThumbnail
+                            rectangle = { _localOnly }
+                            zOrder = { 1 } />
                 }
                 <ScrollView
                     horizontal = { isNarrowAspectRatio }
@@ -117,7 +125,9 @@ class Filmstrip extends Component<Props> {
                     style = { styles.scrollView } >
                     {
                         !this._separateLocalThumbnail && !isNarrowAspectRatio
-                            && <LocalThumbnail zOrder = { 1 } />
+                            && <LocalThumbnail
+                                rectangle = { _localOnly }
+                                zOrder = { 1 } />
                     }
                     {
 
@@ -130,7 +140,9 @@ class Filmstrip extends Component<Props> {
                     }
                     {
                         !this._separateLocalThumbnail && isNarrowAspectRatio
-                            && <LocalThumbnail zOrder = { 1 } />
+                            && <LocalThumbnail
+                                rectangle = { _localOnly }
+                                zOrder = { 1 } />
                     }
                 </ScrollView>
                 {

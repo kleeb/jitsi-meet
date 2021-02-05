@@ -2,7 +2,7 @@
 
 import { ColorSchemeRegistry, schemeColor } from '../../../base/color-scheme';
 import { ColorPalette } from '../../../base/styles';
-import { FILMSTRIP_SIZE } from '../../constants';
+import { FILMSTRIP_SIZE, RECTANGLE_THUMBNAIL_HEIGHT } from '../../constants';
 
 /**
  * Size for the Avatar.
@@ -34,6 +34,16 @@ export default {
         flexGrow: 0,
         justifyContent: 'flex-end',
         height: FILMSTRIP_SIZE
+    },
+
+    /**
+     * The style of FilmStrip if show local video only
+     */
+    filmstripLocalOnly: {
+        flexDirection: 'row',
+        flexGrow: 0,
+        justifyContent: 'flex-end',
+        height: RECTANGLE_THUMBNAIL_HEIGHT
     },
 
     /**
