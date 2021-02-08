@@ -4,7 +4,8 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     SCREEN_SHARE_PARTICIPANTS_UPDATED,
-    SET_TILE_VIEW
+    SET_TILE_VIEW,
+    CLEAR_TILE_VIEW_STATE
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -20,7 +21,7 @@ const DEFAULT_STATE = {
      * @public
      * @type {boolean}
      */
-    tileViewEnabled: undefined
+    tileViewEnabled: true
 };
 
 const STORE_NAME = 'features/video-layout';
@@ -38,6 +39,12 @@ ReducerRegistry.register(STORE_NAME, (state = DEFAULT_STATE, action) => {
         return {
             ...state,
             tileViewEnabled: action.enabled
+        };
+
+    case CLEAR_TILE_VIEW_STATE:
+        return {
+            ...state,
+            tileViewEnabled: DEFAULT_STATE.tileViewEnabled
         };
     }
 

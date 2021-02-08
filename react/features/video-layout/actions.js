@@ -4,7 +4,8 @@ import type { Dispatch } from 'redux';
 
 import {
     SCREEN_SHARE_PARTICIPANTS_UPDATED,
-    SET_TILE_VIEW
+    SET_TILE_VIEW,
+    CLEAR_TILE_VIEW_STATE
 } from './actionTypes';
 import { shouldDisplayTileView } from './functions';
 
@@ -42,6 +43,20 @@ export function setTileView(enabled: ?boolean) {
         enabled
     };
 }
+
+/**
+ * Creates a (redux) action to clear tile view state.
+ *
+ * @returns {{
+ *     type: CLEAR_TILE_VIEW_STATE,
+ * }}
+ */
+export function clearTileViewState() {
+    return {
+        type: CLEAR_TILE_VIEW_STATE
+    };
+}
+
 
 /**
  * Creates a (redux) action which signals either to exit tile view if currently

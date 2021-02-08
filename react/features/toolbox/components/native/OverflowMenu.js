@@ -133,14 +133,18 @@ class OverflowMenu extends PureComponent<Props, State> {
                 <AudioOnlyButton { ...buttonProps } />
                 <RaiseHandButton { ...buttonProps } />
                 <LobbyModeButton { ...buttonProps } />
-                <ScreenSharingButton { ...buttonProps } />
+                {/* BL-475 Screen sharing should be disabled
+                    <ScreenSharingButton { ...buttonProps } />
+                */}
                 <MoreOptionsButton { ...moreOptionsButtonProps } />
                 <Collapsible collapsed = { !showMore }>
                     <ToggleCameraButton { ...buttonProps } />
                     <TileViewButton { ...buttonProps } />
                     <RecordButton { ...buttonProps } />
                     <LiveStreamButton { ...buttonProps } />
-                    <VideoShareButton { ...buttonProps } />
+                    {/* BL-216 Turn off Share a youtube video option:
+                        <VideoShareButton { ...buttonProps } />
+                    */}
                     <RoomLockButton { ...buttonProps } />
                     <ClosedCaptionButton { ...buttonProps } />
                     <SharedDocumentButton { ...buttonProps } />

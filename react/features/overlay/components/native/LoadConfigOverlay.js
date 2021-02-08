@@ -39,7 +39,18 @@ class LoadConfigOverlay extends Component<Props> {
      * {@code false}, otherwise.
      */
     static needsRender(state: Object) {
-        return Boolean(state['features/overlay'].loadConfigOverlayVisible);
+        const { connecting, connection } = state['features/base/connection'];
+        const {
+            conference,
+            joining,
+            membersOnly,
+            leaving
+        } = state['features/base/conference'];
+
+        const connecting_
+            = connecting || (connection && (!membersOnly && (joining || (!conference && !leaving))));
+
+        return Boolean(state['features/overlay'].loadConfigOverlayVisible) || connecting_;
     }
 
     /**

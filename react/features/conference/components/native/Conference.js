@@ -149,7 +149,7 @@ class Conference extends AbstractConference<Props, *> {
             <Container style = { styles.conference }>
                 <StatusBar
                     barStyle = 'light-content'
-                    hidden = { true }
+                    hidden = { false }
                     translucent = { true } />
                 { this._renderContent() }
             </Container>
@@ -253,7 +253,9 @@ class Conference extends AbstractConference<Props, *> {
                   * The LargeVideo is the lowermost stacking layer.
                   */
                     _shouldDisplayTileView
-                        ? <TileView onClick = { this._onClick } />
+                        ? <TileView
+                            isConnecting = { _connecting }
+                            onClick = { this._onClick } />
                         : <LargeVideo onClick = { this._onClick } />
                 }
 

@@ -28,7 +28,12 @@ type Props = {
     /**
      * The ID of the participant to render the label for.
      */
-    participantId: string
+    participantId: string,
+
+    /**
+     * Render over video.
+     */
+    renderOverVideo: boolean
 }
 
 /**
@@ -64,7 +69,7 @@ class DisplayNameLabel extends Component<Props> {
  * }}
  */
 function _mapStateToProps(state: Object, ownProps: Props) {
-    const { participantId } = ownProps;
+    const { participantId, renderOverVideo } = ownProps;
     const localParticipant = getLocalParticipant(state);
     const participant = getParticipantById(state, participantId);
     const isFakeParticipant = participant && participant.isFakeParticipant;
@@ -74,7 +79,7 @@ function _mapStateToProps(state: Object, ownProps: Props) {
     // them.
     const _render = Boolean(participantId)
         && localParticipant?.id !== participantId
-        && !shouldRenderParticipantVideo(state, participantId)
+        && (renderOverVideo || !shouldRenderParticipantVideo(state, participantId))
         && !isFakeParticipant;
 
     return {
