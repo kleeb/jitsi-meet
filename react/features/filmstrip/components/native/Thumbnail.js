@@ -195,6 +195,7 @@ function Thumbnail(props: Props) {
                 { renderDominantSpeakerIndicator && <DominantSpeakerIndicator /> }
             </View> }
 
+            {/*
             // BL-496
             // { !participant.isFakeParticipant && <View
             //     style = { [
@@ -204,6 +205,7 @@ function Thumbnail(props: Props) {
             //     ] }>
             //     <ConnectionIndicator participantId = { participant.id } />
             // </View> }
+            */}
 
             { !participant.isFakeParticipant && <Container style = { styles.thumbnailIndicatorContainer }>
                 { audioMuted
