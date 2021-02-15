@@ -195,14 +195,15 @@ function Thumbnail(props: Props) {
                 { renderDominantSpeakerIndicator && <DominantSpeakerIndicator /> }
             </View> }
 
-            { !participant.isFakeParticipant && <View
-                style = { [
-                    styles.thumbnailTopIndicatorContainer,
-                    styles.thumbnailTopRightIndicatorContainer,
-                    { top: _isIos() && lowerTopIcons ? getStatusBarHeight() / 2 : 0 }
-                ] }>
-                <ConnectionIndicator participantId = { participant.id } />
-            </View> }
+            // BL-496
+            // { !participant.isFakeParticipant && <View
+            //     style = { [
+            //         styles.thumbnailTopIndicatorContainer,
+            //         styles.thumbnailTopRightIndicatorContainer,
+            //         { top: _isIos() && lowerTopIcons ? getStatusBarHeight() / 2 : 0 }
+            //     ] }>
+            //     <ConnectionIndicator participantId = { participant.id } />
+            // </View> }
 
             { !participant.isFakeParticipant && <Container style = { styles.thumbnailIndicatorContainer }>
                 { audioMuted
