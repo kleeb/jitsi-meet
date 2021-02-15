@@ -34,11 +34,12 @@ MiddlewareRegistry.register(store => next => action => {
         const { participant: p } = action;
         const { dispatch, getState } = store;
 
-        if (!p.local && !joinLeaveNotificationsDisabled()) {
-            dispatch(showParticipantJoinedNotification(
-                getParticipantDisplayName(getState, p.id)
-            ));
-        }
+        // BL-613
+        // if (!p.local && !joinLeaveNotificationsDisabled()) {
+        //     dispatch(showParticipantJoinedNotification(
+        //         getParticipantDisplayName(getState, p.id)
+        //     ));
+        // }
 
         if (typeof interfaceConfig === 'object'
                 && !interfaceConfig.DISABLE_FOCUS_INDICATOR && p.role === PARTICIPANT_ROLE.MODERATOR) {

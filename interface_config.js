@@ -57,7 +57,7 @@ var interfaceConfig = {
     /**
      * If true, notifications regarding joining/leaving are no longer displayed.
      */
-    DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+    DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
 
     /**
      * If true, presence status: busy, calling, connected etc. is not displayed.
