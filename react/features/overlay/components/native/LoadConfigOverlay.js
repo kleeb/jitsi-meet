@@ -74,13 +74,15 @@ class LoadConfigOverlay extends Component<Props> {
                             color = { _styles.indicatorColor }
                             size = 'large'
                             style = { styles.connectIndicator } />
-                        <Text
-                            style = { [
-                                styles.loadingOverlayText,
-                                _styles.loadingOverlayText
-                            ] }>
-                            { this.props.t('connectingOverlay.joiningRoom') }
-                        </Text>
+                        {/* // BL-622
+                            <Text
+                        //     style = { [
+                        //         styles.loadingOverlayText,
+                        //         _styles.loadingOverlayText
+                        //     ] }>
+                        //     { this.props.t('connectingOverlay.joiningRoom') }
+                        // </Text>
+                        */}
                     </SafeAreaView>
                 </View>
             </OverlayFrame>
