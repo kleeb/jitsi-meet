@@ -263,6 +263,8 @@ class TileView extends Component<Props> {
             aspectRatio: this._getTilesRatio(),
             flex: 0,
             height: this._getTileDimensions().height,
+            maxHeight: null,
+            maxWidth: null,
             width: null
         };
 

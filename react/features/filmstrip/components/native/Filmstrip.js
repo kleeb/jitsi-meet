@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 
-import { Container, Platform } from '../../../base/react';
+import { Platform } from '../../../base/react';
 import { connect } from '../../../base/redux';
 import { ASPECT_RATIO_NARROW } from '../../../base/responsive-ui/constants';
 import { isFilmstripVisible } from '../../functions';
@@ -21,11 +21,6 @@ type Props = {
      * Application's aspect ratio.
      */
     _aspectRatio: Symbol,
-
-    /**
-     * The indicator which determines whether the filmstrip is enabled.
-     */
-    _enabled: boolean,
 
     /**
      * The participants in the conference.
@@ -93,7 +88,7 @@ class Filmstrip extends Component<Props> {
     render() {
         const { _aspectRatio, _enabled, _participants, _visible, _localOnly } = this.props;
 
-        if (!_enabled) {
+        if (!_visible) {
             return null;
         }
 
@@ -107,9 +102,7 @@ class Filmstrip extends Component<Props> {
         }
 
         return (
-            <Container
-                style = { filmstripStyle }
-                visible = { _visible }>
+            <SafeAreaView style = { filmstripStyle }>
                 {
                     this._separateLocalThumbnail
 
@@ -151,7 +144,7 @@ class Filmstrip extends Component<Props> {
                             rectangle = { _localOnly }
                             zOrder = { 1 } />
                 }
-            </Container>
+            </SafeAreaView>
         );
     }
 
@@ -198,9 +191,8 @@ function _mapStateToProps(state) {
 
     return {
         _aspectRatio: state['features/base/responsive-ui'].aspectRatio,
-        _enabled: enabled,
         _participants: participants.filter(p => !p.local),
-        _visible: isFilmstripVisible(state)
+        _visible: enabled && isFilmstripVisible(state)
     };
 }
 
