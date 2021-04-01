@@ -4,7 +4,6 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     SCREEN_SHARE_PARTICIPANTS_UPDATED,
-    SET_TILE_VIEW,
     CLEAR_TILE_VIEW_STATE,
     SCREEN_SHARE_REMOTE_PARTICIPANTS_UPDATED,
     SET_TILE_VIEW
