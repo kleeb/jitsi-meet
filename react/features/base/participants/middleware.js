@@ -353,7 +353,8 @@ function _maybePlaySounds({ getState, dispatch }, action) {
 
             // The sounds for the poltergeist are handled by features/invite.
             if (presence !== INVITED && presence !== CALLING) {
-                dispatch(playSound(PARTICIPANT_JOINED_SOUND_ID));
+                // BL-740
+                // dispatch(playSound(PARTICIPANT_JOINED_SOUND_ID));
             }
         } else if (action.type === PARTICIPANT_LEFT) {
             // BL-740
